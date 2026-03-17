@@ -1,4 +1,5 @@
 import mysql.connector
+#ola
 
 def conectar():
     """Estabelece a conexão com o banco de dados MySQL."""

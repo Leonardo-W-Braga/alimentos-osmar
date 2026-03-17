@@ -1,8 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
 from src.app import obter_proximo_sec
-#ola
-
 
 def test_sec_primeiro_registro():
     """Testa quando não existe nenhum registro no grupo."""
@@ -53,3 +51,4 @@ def test_sec_falha_exemplo():
 '''
 
 
+print("")
