@@ -1,4 +1,4 @@
-# name: Meu Primeiro Pipeline
+name: Meu Primeiro Pipeline
 
 # 1. Quando o pipeline deve rodar?
 on:
