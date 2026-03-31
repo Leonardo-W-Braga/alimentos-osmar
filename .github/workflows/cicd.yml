@@ -37,7 +37,7 @@ jobs:
         run: |
           # Criação da tabela com a lógica de concatenação automática (Item 5)
           mysql -h 127.0.0.1 -u appuser -p1234 estoque_frutas -e "
-          CREATE TABLE IF NOT EXISTS alimentos (
+          CREATE TABLE IF NOT EXISTS frutas (
               id INT NOT NULL AUTO_INCREMENT,
               sec VARCHAR(10) NOT NULL,
               grupo_id CHAR(1) NOT NULL,
@@ -61,4 +61,4 @@ jobs:
         run: |
           # Executa a query para validar se o 'codigo_completo' foi gerado corretamente
           echo "Relatório de Alimentos e Códigos Sequenciais Gerados:"
-          mysql -h 127.0.0.1 -u appuser -p1234 estoque_frutas -e "SELECT id, fruta, codigo_completo FROM alimentos;"
+          mysql -h 127.0.0.1 -u appuser -p1234 estoque_frutas -e "SELECT id, fruta, codigo_completo FROM frutas;"
