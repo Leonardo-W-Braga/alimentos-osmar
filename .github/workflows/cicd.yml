@@ -52,4 +52,4 @@ jobs:
           DB_USER: appuser
           DB_PASSWORD: 1234
           DB_NAME: estoque_frutas
-        run: pytest
+        run: pytest -s
