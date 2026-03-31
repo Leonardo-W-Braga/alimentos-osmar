@@ -2,6 +2,23 @@ import pytest
 from unittest.mock import MagicMock
 from src.app import obter_proximo_sec
 from src.app import conectar
+import mysql.connector
+
+
+def conectar():
+    """Estabelece a conexão com o banco de dados MySQL."""
+    """Olá"""
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="1234",
+            database="estoque_frutas"
+        )
+        return conn
+    except mysql.connector.Error as err:
+        print(f"Erro de conexão: {err}")
+        return None
 
 
 def test_sec_primeiro_registro():
