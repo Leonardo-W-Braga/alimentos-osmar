@@ -3,21 +3,22 @@ from unittest.mock import MagicMock
 from src.app import obter_proximo_sec
 from src.app import conectar
 import mysql.connector
+import os
 
 
 def conectar():
-    """Estabelece a conexão com o banco de dados MySQL."""
-    """Olá"""
     try:
         conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="1234",
-            database="estoque_frutas"
+            host=os.getenv("DB_HOST", "localhost"),
+            user=os.getenv("DB_USER", "root"),
+            password=os.getenv("DB_PASSWORD", "root"),
+            database=os.getenv("DB_NAME", "alimentos"),
+            port=3306
         )
         return conn
-    except mysql.connector.Error as err:
-        print(f"Erro de conexão: {err}")
+
+    except Exception as e:
+        print("Erro de conexão:", e)
         return None
 
 
