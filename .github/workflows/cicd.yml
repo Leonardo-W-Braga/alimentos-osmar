@@ -1,24 +1,64 @@
-name: Meu Primeiro Pipeline
+name: Entrega Final - CI/CD MySQL & Python
 
-# 1. Quando o pipeline deve rodar?
-on:
-  push:
-    branches: [ "main" ] # Roda toda vez que você der 'git push'
-  workflow_dispatch:      # Permite rodar clicando em um botão no site
+on: [push]
 
-# 2. O que o pipeline deve fazer?
 jobs:
-  execucao-do-script:
-    runs-on: ubuntu-latest # O GitHub vai "alugar" um computador com Linux para você
+  configuracao-ambiente:
+    runs-on: ubuntu-latest  # Item 1: Ambiente Linux base
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: estoque_frutas
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Passo 1 - Baixar o código do GitHub
+      - name: 1. Baixar Código do Repositório
         uses: actions/checkout@v4
 
-      - name: Passo 2 - Instalar o Python
+      - name: 2. Configurar Python (Item 4)
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+      - run: pip install pytest mysql-connector-python
 
-      - name: Passo 3 - Executar o script
-        run: python testes/test_app.py
+      - name: 3. Instalar e Configurar MySQL (Item 2)
+        run: |
+          # Configura acesso externo para o runner do GitHub
+          mysql -h 127.0.0.1 -u root -proot_password -e "CREATE USER IF NOT EXISTS 'appuser'@'%' IDENTIFIED WITH mysql_native_password BY '1234';"
+          mysql -h 127.0.0.1 -u root -proot_password -e "GRANT ALL PRIVILEGES ON estoque_frutas.* TO 'appuser'@'%';"
+          mysql -h 127.0.0.1 -u root -proot_password -e "FLUSH PRIVILEGES;"
+
+      - name: 4. Criar Tabela com Campos Específicos (Item 3)
+        run: |
+          # Criação da tabela com a lógica de concatenação automática (Item 5)
+          mysql -h 127.0.0.1 -u appuser -p1234 estoque_frutas -e "
+          CREATE TABLE IF NOT EXISTS alimentos (
+              id INT NOT NULL AUTO_INCREMENT,
+              sec VARCHAR(10) NOT NULL,
+              grupo_id CHAR(1) NOT NULL,
+              fruta VARCHAR(100) NOT NULL,
+              pais CHAR(2) NOT NULL DEFAULT 'BR',
+              codigo_completo VARCHAR(20) AS (CONCAT(pais, sec, grupo_id)) STORED,
+              PRIMARY KEY (id)
+          );"
+
+      - name: 5. Inserir Dados e Executar Testes (Item 6)
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USER: appuser
+          DB_PASS: 1234
+          DB_NAME: estoque_frutas
+        run: |
+          # O Pytest deve rodar sua função Python que insere os dados
+          pytest
+
+      - name: 6. Verificar Geração de Código (Requisito de Conferência)
+        run: |
+          # Executa a query para validar se o 'codigo_completo' foi gerado corretamente
+          echo "Relatório de Alimentos e Códigos Sequenciais Gerados:"
+          mysql -h 127.0.0.1 -u appuser -p1234 estoque_frutas -e "SELECT id, fruta, codigo_completo FROM alimentos;"
