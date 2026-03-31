@@ -1,6 +1,4 @@
-create database estoque_frutas;
-
-CREATE TABLE frutas (
+CREATE TABLE IF NOT EXISTS frutas (
     id INT NOT NULL AUTO_INCREMENT,
     sec VARCHAR(10) NOT NULL,
     grupo_id CHAR(1) NOT NULL,
@@ -11,5 +9,3 @@ CREATE TABLE frutas (
     UNIQUE KEY idx_codigo_unico (codigo_completo),
     UNIQUE KEY idx_fruta_grupo_unico (fruta, grupo_id)
 )
-
-select * from frutas;

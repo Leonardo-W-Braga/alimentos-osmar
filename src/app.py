@@ -3,6 +3,7 @@ import mysql.connector
 
 def conectar():
     """Estabelece a conexão com o banco de dados MySQL."""
+    """Olá"""
     try:
         conn = mysql.connector.connect(
             host="localhost",

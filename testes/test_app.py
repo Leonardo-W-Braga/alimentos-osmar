@@ -62,7 +62,7 @@ def test_sec_falha_exemplo():
 
     resultado = obter_proximo_sec(cursor_mock, "A")
 
-    # esperado errado de propósito
+    # esperado errado de propósitoOOOO
     assert resultado == "0005"
 
 '''
