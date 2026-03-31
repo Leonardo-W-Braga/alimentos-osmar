@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 from src.app import obter_proximo_sec
+from src.app import conectar
+
 
 def test_sec_primeiro_registro():
     """Testa quando não existe nenhum registro no grupo."""
@@ -34,6 +36,21 @@ def test_sec_formatacao_quatro_digitos():
 
     assert resultado == "0010"
 
+
+def teste_ver_tabela():
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM frutas")
+    resultados = cursor.fetchall()
+
+    print("CONTEUDO TABELA")
+    for linha in resultados:
+        print(linha)
+    cursor.close()
+    conn.close()
+
+    assert True
 
 
 '''
