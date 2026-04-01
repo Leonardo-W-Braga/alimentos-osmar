@@ -1,16 +1,17 @@
+import os
 import mysql.connector
 
 # ---------------------------------------------------
-# CONEXÃO COM BANCO
+# CONEXÃO COM BANCO (AGORA USA VARIÁVEIS DE AMBIENTE)
 # ---------------------------------------------------
 def conectar():
-    """Estabelece a conexão com o banco de dados MySQL."""
     try:
         conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="1234",
-            database="estoque_frutas"
+            host=os.getenv("DB_HOST", "localhost"),
+            user=os.getenv("DB_USER", "root"),
+            password=os.getenv("DB_PASSWORD", "1234"),
+            database=os.getenv("DB_NAME", "estoque_frutas"),
+            port=3306
         )
 
         inicializar_banco(conn)  # garante tabela + dados seed
@@ -22,7 +23,7 @@ def conectar():
 
 
 # ---------------------------------------------------
-# CRIA TABELA E INSERE DADOS PARA TESTES (SEED)
+# CRIA TABELA E INSERE DADOS AUTOMÁTICOS (SEED)
 # ---------------------------------------------------
 def inicializar_banco(conn):
     cursor = conn.cursor()
